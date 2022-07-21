@@ -1,13 +1,18 @@
 # react-native-jitsi-meet
 React native wrapper for Jitsi Meet SDK
 
+use jitsi-meet-sdk-3.10.2 custom build with fix button issue
+
+https://github.com/skrafft/react-native-jitsi-meet/issues/265
+
+https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-android-sdk/#build-and-use-your-own-sdk-artifactsbinaries
 ## Important notice
 
 Jitsi Meet SDK is a packed React Native SDK. Running react-native-jitsi-meet will run this React Native SDK inside your React Native app. We know that this is suboptimal but sadly we did not find any other solution without massive rewrite of Jitsi Meet SDK. Compatibility with other libraries used internally by Jitsi Meet SDK might be broken (version mismatch) or you might experience performance issues or touch issues in some edge cases.
 
 ## Install
 
-`npm install react-native-jitsi-meet --save` 
+`npm install https://github.com/dedesundara/react-native-jitsi-meet.git` 
 
 If you are using React-Native < 0.60, you should use a version < 2.0.0.  
 For versions higher than 2.0.0, you need to add the following piece of code in your ```metro.config.js``` file to avoid conflicts between react-native-jitsi-meet and react-native in metro bundler.
@@ -155,7 +160,7 @@ You can add listeners for the following events:
 contains `<string>voip</string>`
 
 ## iOS Install for RN >= 0.60
-1.) Modify your Podfile to have ```platform :ios, '10.0'``` and execute ```pod install```  
+1.) Modify your Podfile to have ```platform :ios, '11.0'``` and execute ```pod install```  
 2.) In Xcode, under Build setting set Enable Bitcode to No  
 
 ## iOS Install for RN < 0.60
@@ -300,7 +305,7 @@ allprojects {
             url "https://maven.google.com"
         }
         maven { // <---- Add this block
-            url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
+            url("$rootDir/../node_modules/react-native-jitsi-meet/releases")
         }
         maven { url "https://jitpack.io" }
     }
@@ -359,7 +364,19 @@ android {
 }
 dependencies {
   ...
-    implementation(project(':react-native-jitsi-meet'))
+  implementation('org.jitsi.react:jitsi-meet-sdk:3.10.2') {
+    // Un-comment below if using hermes
+    //exclude group: 'com.facebook',module:'hermes'
+    // Un-comment any packages below that you have added to your project to prevent `duplicate_classes` errors
+    //exclude group: 'com.facebook.react',module:'react-native-community-async-storage'
+    //exclude group: 'com.facebook.react',module:'react-native-community_netinfo'
+    //exclude group: 'com.facebook.react',module:'react-native-svg'
+    //exclude group: 'com.facebook.react',module:'react-native-fetch-blob'
+    //exclude group: 'com.facebook.react',module:'react-native-webview'
+    //exclude group: 'com.facebook.react',module:'react-native-linear-gradient'
+    //exclude group: 'com.facebook.react',module:'react-native-sound'
+    transitive = true 
+  }
 }
 ```
 
